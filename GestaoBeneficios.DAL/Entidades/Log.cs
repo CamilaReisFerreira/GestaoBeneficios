@@ -7,9 +7,9 @@ namespace GestaoBeneficios.DAL.Entidades
 {
     public class Log : Base
     {
-        public long Id_Colaborador { get; set; }
+        public long? Id_Colaborador { get; set; }
 
-        public long Id_Beneficio { get; set; }
+        public long? Id_Beneficio { get; set; }
 
         public DateTime Data { get; set; }
 

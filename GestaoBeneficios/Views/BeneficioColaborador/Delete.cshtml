@@ -1,0 +1,38 @@
+﻿@model GestaoBeneficios.DTO.BeneficioColaboradorDTO
+
+@{
+    ViewData["Title"] = "Benefícios por Colaborador";
+}
+
+<h2>Excluir Benefício por Colaborador</h2>
+
+<h3>Confirma a exclusão do registro?</h3>
+<div>
+    <h4>Benefício por Colaborador</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantidade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Quantidade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorTotal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValorTotal)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="submit" value="Excluir" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar para a listagem</a>
+    </form>
+</div>

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GestaoBeneficios.DAL.Context;
+﻿using GestaoBeneficios.DAL.Context;
+using GestaoBeneficios.DAL.Interfaces;
+using GestaoBeneficios.DAL.Persistencia;
+using GestaoBeneficios.DTO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,12 +38,16 @@ namespace GestaoBeneficios
                     .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddDbContext<EFContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddScoped<ICargoDAL, CargoDAL>();
-            //services.AddScoped<IColaboradorDAL, ColaboradorDAL>();
-            //services.AddScoped<IColaboradorTarefaDAL, ColaboradorTarefaDAL>();
-            //services.AddScoped<IHorasColaboradorDAL, HorasColaboradorDAL>();
-            //services.AddScoped<IProjetoDAL, ProjetoDAL>();
-            //services.AddScoped<ITarefaDAL, TarefaDAL>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<EFContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddScoped<IBeneficio, BeneficioDAL>();
+            services.AddScoped<IBeneficioColaborador, BeneficioColaboradorDAL>();
+            services.AddScoped<ICargo, CargoDAL>();
+            services.AddScoped<ILog, LogDAL>();
+            services.AddScoped<IPerfil, PerfilDAL>();
+            services.AddScoped<IPessoa, PessoaDAL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

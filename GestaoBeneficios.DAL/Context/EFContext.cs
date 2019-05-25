@@ -17,5 +17,13 @@ namespace GestaoBeneficios.DAL.Context
         public DbSet<Log> Logs { get; set; }
         public DbSet<Perfil> Perfis { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Perfil>().HasData(
+                new Perfil() { Id = 1, Tipo = "Administrador" },
+                new Perfil() { Id = 2, Tipo = "Colaborador" }
+            );
+        }
     }
 }

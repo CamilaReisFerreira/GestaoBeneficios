@@ -1,0 +1,29 @@
+﻿@model GestaoBeneficios.DTO.PerfilDTO
+
+@{
+    ViewData["Title"] = "Perfis";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Perfil</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Voltar para a listagem</a>
+</div>

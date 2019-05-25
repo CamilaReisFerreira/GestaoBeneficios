@@ -23,5 +23,9 @@ namespace GestaoBeneficios.DTO
 
         [Display(Name = "Valor Atual")]
         public string ValorAtual { get; set; }
+
+        public long? Id_Colaborador { get; set; }
+
+        public long? Id_Beneficio { get; set; }
     }
 }

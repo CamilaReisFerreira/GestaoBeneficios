@@ -1,0 +1,38 @@
+﻿@model GestaoBeneficios.DTO.CargoDTO
+
+@{
+    ViewData["Title"] = "Cargos";
+}
+
+<h2>Excluir Cargo</h2>
+
+<h3>Confirma a exclusão do registro?</h3>
+<div>
+    <h4>Cargo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorBeneficio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValorBeneficio)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="submit" value="Excluir" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar para a listagem</a>
+    </form>
+</div>
