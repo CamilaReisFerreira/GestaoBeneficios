@@ -50,6 +50,7 @@ namespace GestaoBeneficios.DAL.Persistencia
         public PessoaDTO GetPessoa(long Id)
         {
             Pessoa pessoa = _context.Pessoas.Find(Id);
+            return GetPesoaDTO(pessoa);
             var cargo = pessoa.CargoId != null ? _context.Cargos.Find(pessoa.CargoId) : null;
             var perfil = pessoa.PerfilId != null ? _context.Perfis.Find(pessoa.PerfilId) : null;
 
@@ -122,6 +123,41 @@ namespace GestaoBeneficios.DAL.Persistencia
                 pessoa.PerfilId = item.Perfil.Id;
 
             _context.SaveChanges();
+        }
+
+        public PessoaDTO Login(string login, string senha)
+        {
+            Pessoa pessoa = _context.Pessoas.Where(x=> x.Login == login && x.Senha == senha).FirstOrDefault();
+            return GetPesoaDTO(pessoa);
+        }
+
+        private PessoaDTO GetPesoaDTO(Pessoa pessoa)
+        {
+            var cargo = pessoa.CargoId != null ? _context.Cargos.Find(pessoa.CargoId) : null;
+            var perfil = pessoa.PerfilId != null ? _context.Perfis.Find(pessoa.PerfilId) : null;
+
+            return pessoa != null ?
+                new PessoaDTO
+                {
+                    Id = pessoa.Id,
+                    Nome = pessoa.Nome,
+                    Login = pessoa.Login,
+                    Senha = pessoa.Senha,
+                    CPF = pessoa.CPF,
+                    DataAdmissao = pessoa.DataAdmissao,
+                    DataNascimento = pessoa.DataNascimento,
+                    Cargo = cargo != null ? new CargoDTO
+                    {
+                        Id = cargo.Id,
+                        Nome = cargo.Nome,
+                        ValorBeneficio = cargo.ValorBeneficio
+                    } : null,
+                    Perfil = perfil != null ? new PerfilDTO
+                    {
+                        Id = perfil.Id,
+                        Tipo = perfil.Tipo
+                    } : null
+                } : null;
         }
     }
 }

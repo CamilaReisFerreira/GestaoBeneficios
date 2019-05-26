@@ -1,33 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Authentication;
+﻿using GestaoBeneficios.DAL.Interfaces;
+using GestaoBeneficios.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoBeneficios.Controllers
 {
     public class LoginController : Controller
     {
-        private AuthenticationManager AuthManager
+        public IPessoa Repository { get; set; }
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
+
+        public LoginController(IPessoa _repository, IHttpContextAccessor httpContextAccessor)
         {
-            get
-            {
-                return HttpContext.Authentication;
-            }
+            Repository = _repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        //private GerenciadorUsuario UserManager
-        //{
-        //    get
-        //    {
-        //        return HttpContext.GetOwinContext().GetUserManager<GerenciadorUsuario>();
-        //    }
-        //}
-
-        public IActionResult Index()
+        public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginViewModel login)
+        {
+            var retorno = Repository.Login("camila", "camila");
+            _session.SetString("User", retorno.Login);
+            _session.SetString("UserRole", retorno.Perfil.Tipo);
+            return RedirectToAction("Login");
         }
     }
 }

@@ -23,11 +23,6 @@ namespace GestaoBeneficios.Controllers
             return View(Repository.ListarPerfis());
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         public IActionResult Details(long? id)
         {
             if (id == null)

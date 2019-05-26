@@ -38,9 +38,11 @@ namespace GestaoBeneficios
                     .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddDbContext<EFContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<EFContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<EFContext>()
+            //    .AddDefaultTokenProviders();
+            services.AddSession();
+            services.AddHttpContextAccessor();
 
             services.AddScoped<IBeneficio, BeneficioDAL>();
             services.AddScoped<IBeneficioColaborador, BeneficioColaboradorDAL>();
@@ -64,6 +66,7 @@ namespace GestaoBeneficios
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

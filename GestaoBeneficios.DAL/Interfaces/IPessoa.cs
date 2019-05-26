@@ -16,5 +16,7 @@ namespace GestaoBeneficios.DAL.Interfaces
         void Delete(long Id);
 
         PessoaDTO GetPessoa(long Id);
+
+        PessoaDTO Login(string login, string senha);
     }
 }

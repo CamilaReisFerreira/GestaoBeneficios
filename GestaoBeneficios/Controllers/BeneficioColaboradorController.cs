@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GestaoBeneficios.DAL.Interfaces;
 using GestaoBeneficios.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoBeneficio.Controllers
@@ -11,15 +12,20 @@ namespace GestaoBeneficio.Controllers
     public class BeneficioColaboradorController : Controller
     {
         public IBeneficioColaborador Repository { get; set; }
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession _session => _httpContextAccessor.HttpContext.Session;
 
-        public BeneficioColaboradorController(IBeneficioColaborador _repository)
+        public BeneficioColaboradorController(IBeneficioColaborador _repository, IHttpContextAccessor httpContextAccessor)
         {
             Repository = _repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
         public IActionResult Index()
         {
+            var message = _session.GetString("User");
+            var message2 = _session.GetString("UserRole");
             return View(Repository.ListarBeneficiosColaboradores());
         }
 
