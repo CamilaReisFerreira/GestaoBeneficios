@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoBeneficios.DAL.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20190525202726_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20190526164653_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -92,9 +92,9 @@ namespace GestaoBeneficios.DAL.Migrations
 
                     b.Property<DateTime>("Data");
 
-                    b.Property<long?>("Id_Beneficio");
+                    b.Property<long>("Id_Beneficio");
 
-                    b.Property<long?>("Id_Colaborador");
+                    b.Property<long>("Id_Colaborador");
 
                     b.Property<string>("Operacao");
 
@@ -143,9 +143,9 @@ namespace GestaoBeneficios.DAL.Migrations
 
                     b.Property<DateTime>("DataNascimento");
 
-                    b.Property<long?>("Id_Cargo");
+                    b.Property<long>("Id_Cargo");
 
-                    b.Property<long?>("Id_Perfil");
+                    b.Property<long>("Id_Perfil");
 
                     b.Property<string>("Login");
 

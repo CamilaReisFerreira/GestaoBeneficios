@@ -31,9 +31,9 @@ namespace GestaoBeneficios.DAL.Persistencia
             };
 
             if (item.Cargo != null)
-                pessoa.Id_Cargo = item.Cargo.Id;
+                pessoa.CargoId = item.Cargo.Id;
             if (item.Perfil != null)
-                pessoa.Id_Perfil = item.Perfil.Id;
+                pessoa.PerfilId = item.Perfil.Id;
 
             _context.Pessoas.Add(pessoa);
             _context.SaveChanges();
@@ -50,8 +50,8 @@ namespace GestaoBeneficios.DAL.Persistencia
         public PessoaDTO GetPessoa(long Id)
         {
             Pessoa pessoa = _context.Pessoas.Find(Id);
-            var cargo = pessoa.Id_Cargo != null ? _context.Cargos.Find(pessoa.Id_Cargo) : null;
-            var perfil = pessoa.Id_Perfil != null ? _context.Perfis.Find(pessoa.Id_Perfil) : null;
+            var cargo = pessoa.CargoId != null ? _context.Cargos.Find(pessoa.CargoId) : null;
+            var perfil = pessoa.PerfilId != null ? _context.Perfis.Find(pessoa.PerfilId) : null;
 
             return pessoa != null ?
                 new PessoaDTO
@@ -117,9 +117,9 @@ namespace GestaoBeneficios.DAL.Persistencia
             pessoa.DataNascimento = item.DataNascimento;
 
             if (item.Cargo != null)
-                pessoa.Id_Cargo = item.Cargo.Id;
+                pessoa.CargoId = item.Cargo.Id;
             if (item.Perfil != null)
-                pessoa.Id_Perfil = item.Perfil.Id;
+                pessoa.PerfilId = item.Perfil.Id;
 
             _context.SaveChanges();
         }

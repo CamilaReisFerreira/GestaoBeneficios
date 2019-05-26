@@ -7,10 +7,6 @@ namespace GestaoBeneficios.DAL.Entidades
 {
     public class Log : Base
     {
-        public long? Id_Colaborador { get; set; }
-
-        public long? Id_Beneficio { get; set; }
-
         public DateTime Data { get; set; }
 
         public string Operacao { get; set; }
@@ -21,8 +17,10 @@ namespace GestaoBeneficios.DAL.Entidades
 
         public string ValorAtual { get; set; }
 
+        public long ColaboradorId { get; set; }
         public Pessoa Colaborador { get; set; }
 
+        public long BeneficioId { get; set; }
         public Beneficio Beneficio { get; set; }
     }
 }

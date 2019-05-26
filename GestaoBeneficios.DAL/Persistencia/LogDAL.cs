@@ -30,9 +30,9 @@ namespace GestaoBeneficios.DAL.Persistencia
             };
 
             if (item.Colaborador != null)
-                log.Id_Colaborador = item.Colaborador.Id;
+                log.ColaboradorId = item.Colaborador.Id;
             if (item.Beneficio != null)
-                log.Id_Beneficio = item.Beneficio.Id;
+                log.BeneficioId = item.Beneficio.Id;
 
             _context.Logs.Add(log);
             _context.SaveChanges();
@@ -49,8 +49,8 @@ namespace GestaoBeneficios.DAL.Persistencia
         public LogDTO GetLog(long Id)
         {
             Log log = _context.Logs.Find(Id);
-            var colaborador = log.Id_Colaborador != null ? _context.Pessoas.Find(log.Id_Colaborador) : null;
-            var beneficio = log.Id_Beneficio != null ? _context.Beneficios.Find(log.Id_Beneficio) : null;
+            var colaborador = log.ColaboradorId != null ? _context.Pessoas.Find(log.ColaboradorId) : null;
+            var beneficio = log.BeneficioId != null ? _context.Beneficios.Find(log.BeneficioId) : null;
 
             return log != null ?
                 new LogDTO

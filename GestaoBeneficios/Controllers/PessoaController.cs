@@ -11,10 +11,14 @@ namespace GestaoPessoas.Controllers
     public class PessoaController : Controller
     {
         public IPessoa Repository { get; set; }
+        public ICargo Cargo_Repository { get; set; }
+        public IPerfil Perfil_Repository { get; set; }
 
-        public PessoaController(IPessoa _repository)
+        public PessoaController(IPessoa _repository, ICargo _cargoRepository, IPerfil _perfilRepository)
         {
             Repository = _repository;
+            Cargo_Repository = _cargoRepository;
+            Perfil_Repository = _perfilRepository;
         }
 
 
@@ -25,6 +29,8 @@ namespace GestaoPessoas.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Cargos = Cargo_Repository.ListarCargos();
+            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
             return View();
         }
 
@@ -72,6 +78,8 @@ namespace GestaoPessoas.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Cargos = Cargo_Repository.ListarCargos();
+            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
             return View(pessoa);
         }
 

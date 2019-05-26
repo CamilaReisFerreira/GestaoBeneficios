@@ -27,9 +27,9 @@ namespace GestaoBeneficios.DAL.Persistencia
             };
 
             if (item.Colaborador != null)
-                beneficioColaborador.Id_Colaborador = item.Colaborador.Id;
+                beneficioColaborador.ColaboradorId = item.Colaborador.Id;
             if (item.Beneficio != null)
-                beneficioColaborador.Id_Beneficio = item.Beneficio.Id;
+                beneficioColaborador.BeneficioId = item.Beneficio.Id;
 
             _context.BeneficiosColaboradores.Add(beneficioColaborador);
             _context.SaveChanges();
@@ -46,8 +46,8 @@ namespace GestaoBeneficios.DAL.Persistencia
         public BeneficioColaboradorDTO GetBeneficioColaborador(long Id)
         {
             BeneficioColaborador beneficioColaborador = _context.BeneficiosColaboradores.Find(Id);
-            var colaborador = beneficioColaborador.Id_Colaborador != null ? _context.Pessoas.Find(beneficioColaborador.Id_Colaborador) : null;
-            var beneficio = beneficioColaborador.Id_Beneficio != null ? _context.Beneficios.Find(beneficioColaborador.Id_Beneficio) : null;
+            var colaborador = beneficioColaborador.ColaboradorId != null ? _context.Pessoas.Find(beneficioColaborador.ColaboradorId) : null;
+            var beneficio = beneficioColaborador.BeneficioId != null ? _context.Beneficios.Find(beneficioColaborador.BeneficioId) : null;
 
             return beneficioColaborador != null ?
                 new BeneficioColaboradorDTO
@@ -110,9 +110,9 @@ namespace GestaoBeneficios.DAL.Persistencia
             beneficioColaborador.ValorTotal = item.ValorTotal;
 
             if (item.Colaborador != null)
-                beneficioColaborador.Id_Colaborador = item.Colaborador.Id;
+                beneficioColaborador.ColaboradorId = item.Colaborador.Id;
             if (item.Beneficio != null)
-                beneficioColaborador.Id_Beneficio = item.Beneficio.Id;
+                beneficioColaborador.BeneficioId = item.Beneficio.Id;
 
             _context.SaveChanges();
         }

@@ -19,12 +19,10 @@ namespace GestaoBeneficios.DAL.Entidades
 
         public DateTime DataAdmissao { get; set; }
 
-        public long? Id_Cargo { get; set; }
-
-        public long? Id_Perfil { get; set; }
-
+        public long CargoId { get; set; }
         public Cargo Cargo { get; set; }
 
+        public long PerfilId { get; set; }
         public Perfil Perfil { get; set; }
     }
 }
