@@ -72,7 +72,7 @@ namespace GestaoBeneficios
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Cargo}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

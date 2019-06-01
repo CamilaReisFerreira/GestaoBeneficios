@@ -2,6 +2,7 @@
 using GestaoBeneficios.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace GestaoBeneficios.Controllers
 {
@@ -24,12 +25,23 @@ namespace GestaoBeneficios.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel login)
+        public IActionResult Login(LoginViewModel loginViewModel)
         {
-            var retorno = Repository.Login("camila", "camila");
-            _session.SetString("User", retorno.Login);
-            _session.SetString("UserRole", retorno.Perfil.Tipo);
-            return RedirectToAction("Login");
+            try
+            {
+                var retorno = Repository.Login(loginViewModel.Login, loginViewModel.Senha);
+                if (retorno == null)
+                    return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+
+                _session.SetString("User", retorno.Login);
+                _session.SetString("UserId", retorno.Id.ToString());
+                _session.SetString("UserRole", retorno.Perfil.Tipo);
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }
         }
     }
 }

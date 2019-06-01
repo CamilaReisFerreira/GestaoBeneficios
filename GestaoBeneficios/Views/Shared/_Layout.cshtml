@@ -13,13 +13,30 @@
         <div class="row">
             <div class="col-xs-12 col-sm-2 col-md-3 bg-success">
                 <ul class="nav nav-pills nav-stacked">
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Cargos", "Index", "Cargo", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Pessoas", "Index", "Pessoa", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Benefícios", "Index", "Beneficio", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Benefícios por Colaborador", "Index", "BeneficioColaborador", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Logs de Alterações", "Index", "Log", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Perfis", "Index", "Perfil", new { area = "" }, null)</li>
-                    <li id="liCargos" role="presentation">@Html.ActionLink("Login", "Login", "Login", new { area = "" }, null)</li>
+                    @{
+                        var login = new Byte[20];
+                        var result = string.Empty;
+                        if (Context.Session.TryGetValue("UserRole", out login))
+                        {
+                            result = System.Text.Encoding.UTF8.GetString(login);
+                        }
+                    }
+                    @if (!string.IsNullOrEmpty(result))
+                    {
+                        <li id="liCargos" role="presentation">@Html.ActionLink("Pessoas", "Index", "Pessoa", new { area = "" }, null)</li>
+                        <li id="liCargos" role="presentation">@Html.ActionLink("Benefícios por Colaborador", "Index", "BeneficioColaborador", new { area = "" }, null)</li>
+                        @if (result == "Administrador")
+                        { 
+                            <li id="liCargos" role="presentation">@Html.ActionLink("Benefícios", "Index", "Beneficio", new { area = "" }, null)</li>
+                            <li id="liCargos" role="presentation">@Html.ActionLink("Cargos", "Index", "Cargo", new { area = "" }, null)</li>
+                            <li id="liCargos" role="presentation">@Html.ActionLink("Logs de Alterações", "Index", "Log", new { area = "" }, null)</li>
+                            <li id="liCargos" role="presentation">@Html.ActionLink("Perfis", "Index", "Perfil", new { area = "" }, null)</li>
+                        }
+                    }
+                    else
+                    {
+                        <li id="liCargos" role="presentation">@Html.ActionLink("Login", "Login", "Login", new { area = "" }, null)</li>
+                    }
                 </ul>
             </div>
             <div class="col-xs-12 col-sm-10 col-md-9">

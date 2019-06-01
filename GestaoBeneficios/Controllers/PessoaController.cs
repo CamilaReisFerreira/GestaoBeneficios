@@ -48,6 +48,8 @@ namespace GestaoPessoas.Controllers
                 return BadRequest();
             }
             PessoaDTO pessoa = Repository.GetPessoa(id.Value);
+            ViewBag.Cargos = Cargo_Repository.ListarCargos();
+            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
             if (pessoa == null)
             {
                 return NotFound();
@@ -78,8 +80,6 @@ namespace GestaoPessoas.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Cargos = Cargo_Repository.ListarCargos();
-            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
             return View(pessoa);
         }
 
