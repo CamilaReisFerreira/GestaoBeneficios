@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GestaoBeneficios.DAL.Interfaces;
 using GestaoBeneficios.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoPessoas.Controllers
@@ -24,14 +25,35 @@ namespace GestaoPessoas.Controllers
 
         public IActionResult Index()
         {
-            return View(Repository.ListarPessoas());
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            {
+                if (HttpContext.Session.GetString("UserRole") == "Administrador")
+                    return View(Repository.ListarPessoas());
+                else {
+                    var id = Convert.ToInt64(HttpContext.Session.GetString("UserId"));
+                    var pessoas = new List<PessoaDTO>();
+                    pessoas.Add(Repository.GetPessoa(id));
+                    return View(pessoas);
+                }
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }
         }
 
         public IActionResult Create()
         {
-            ViewBag.Cargos = Cargo_Repository.ListarCargos();
-            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
-            return View();
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
+            {
+                ViewBag.Cargos = Cargo_Repository.ListarCargos();
+                ViewBag.Perfis = Perfil_Repository.ListarPerfis();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }
         }
 
         [HttpPost]
@@ -41,20 +63,28 @@ namespace GestaoPessoas.Controllers
             Repository.Add(pessoa);
             return RedirectToAction("Index");
         }
+
         public IActionResult Edit(long? id)
         {
-            if (id == null)
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                PessoaDTO pessoa = Repository.GetPessoa(id.Value);
+                ViewBag.Cargos = Cargo_Repository.ListarCargos();
+                ViewBag.Perfis = Perfil_Repository.ListarPerfis();
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+                return View(pessoa);
             }
-            PessoaDTO pessoa = Repository.GetPessoa(id.Value);
-            ViewBag.Cargos = Cargo_Repository.ListarCargos();
-            ViewBag.Perfis = Perfil_Repository.ListarPerfis();
-            if (pessoa == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(pessoa);
         }
 
         [HttpPost]
@@ -71,16 +101,23 @@ namespace GestaoPessoas.Controllers
 
         public IActionResult Delete(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                PessoaDTO pessoa = Repository.GetPessoa(id.Value);
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+                return View(pessoa);
             }
-            PessoaDTO pessoa = Repository.GetPessoa(id.Value);
-            if (pessoa == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(pessoa);
         }
 
         [HttpPost]
@@ -98,16 +135,23 @@ namespace GestaoPessoas.Controllers
 
         public IActionResult Details(long? id)
         {
-            if (id == null)
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                PessoaDTO pessoa = Repository.GetPessoa(id.Value);
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+                return View(pessoa);
             }
-            PessoaDTO pessoa = Repository.GetPessoa(id.Value);
-            if (pessoa == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(pessoa);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace GestaoBeneficios.DAL.Interfaces
     {
         IList<BeneficioColaboradorDTO> ListarBeneficiosColaboradores();
 
+        IList<BeneficioColaboradorDTO> ListarBeneficiosPorPessoa(long Id);
+
         void Add(BeneficioColaboradorDTO item);
 
         void Update(BeneficioColaboradorDTO item);

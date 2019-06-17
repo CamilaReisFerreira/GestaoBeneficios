@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GestaoBeneficios.DAL.Interfaces;
 using GestaoBeneficios.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoBeneficios.Controllers
@@ -20,12 +21,26 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Index()
         {
-            return View(Repository.ListarBeneficios());
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
+            {
+                return View(Repository.ListarBeneficios());
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }
         }
 
         public IActionResult Create()
         {
-            return View();
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }
         }
 
         [HttpPost]
@@ -35,18 +50,26 @@ namespace GestaoBeneficios.Controllers
             Repository.Add(beneficio);
             return RedirectToAction("Index");
         }
+
         public IActionResult Edit(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
+                if (beneficio == null)
+                {
+                    return NotFound();
+                }
+                return View(beneficio);
             }
-            BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
-            if (beneficio == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(beneficio);
         }
 
         [HttpPost]
@@ -63,16 +86,23 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Delete(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
+                if (beneficio == null)
+                {
+                    return NotFound();
+                }
+                return View(beneficio);
             }
-            BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
-            if (beneficio == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(beneficio);
         }
 
         [HttpPost]
@@ -90,16 +120,23 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Details(long? id)
         {
-            if (id == null)
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
+                if (beneficio == null)
+                {
+                    return NotFound();
+                }
+                return View(beneficio);
             }
-            BeneficioDTO beneficio = Repository.GetBeneficio(id.Value);
-            if (beneficio == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(beneficio);
         }
     }
 }

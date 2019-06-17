@@ -9,13 +9,10 @@ namespace GestaoBeneficios.Controllers
     public class LoginController : Controller
     {
         public IPessoa Repository { get; set; }
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private ISession _session => _httpContextAccessor.HttpContext.Session;
 
-        public LoginController(IPessoa _repository, IHttpContextAccessor httpContextAccessor)
+        public LoginController(IPessoa _repository)
         {
             Repository = _repository;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Login()
@@ -33,10 +30,10 @@ namespace GestaoBeneficios.Controllers
                 if (retorno == null)
                     return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
 
-                _session.SetString("User", retorno.Login);
-                _session.SetString("UserId", retorno.Id.ToString());
-                _session.SetString("UserRole", retorno.Perfil.Tipo);
-                return RedirectToAction("Index", "Home", new { area = "" });
+                HttpContext.Session.SetString("User", retorno.Login);
+                HttpContext.Session.SetString("UserId", retorno.Id.ToString());
+                HttpContext.Session.SetString("UserRole", retorno.Perfil.Tipo);
+                return RedirectToAction("Index", "Home", false);
             }
             catch(Exception ex)
             {

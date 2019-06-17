@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GestaoBeneficios.DAL.Interfaces;
 using GestaoBeneficios.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoBeneficios.Controllers
@@ -20,21 +21,35 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Index()
         {
-            return View(Repository.ListarLogs());
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
+            {
+                return View(Repository.ListarLogs());
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            } 
         }
 
         public IActionResult Details(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                LogDTO perfil = Repository.GetLog(id.Value);
+                if (perfil == null)
+                {
+                    return NotFound();
+                }
+                return View(perfil);
             }
-            LogDTO perfil = Repository.GetLog(id.Value);
-            if (perfil == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(perfil);
         }
     }
 }

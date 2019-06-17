@@ -103,6 +103,35 @@ namespace GestaoBeneficios.DAL.Persistencia
             return beneficioColaboradors;
         }
 
+        public IList<BeneficioColaboradorDTO> ListarBeneficiosPorPessoa(long Id)
+        {
+            List<BeneficioColaboradorDTO> beneficioColaboradors =
+            (from o in _context.BeneficiosColaboradores.Where(x => x.Colaborador.Id == Id)
+             orderby o.ValorTotal
+             select new BeneficioColaboradorDTO()
+             {
+                 Id = o.Id,
+                 Quantidade = o.Quantidade,
+                 ValorTotal = o.ValorTotal,
+                 Colaborador = o.Colaborador != null ? new PessoaDTO
+                 {
+                     Id = o.Colaborador.Id,
+                     Nome = o.Colaborador.Nome,
+                     Senha = o.Colaborador.Senha,
+                     CPF = o.Colaborador.CPF,
+                     DataAdmissao = o.Colaborador.DataAdmissao,
+                     DataNascimento = o.Colaborador.DataNascimento
+                 } : null,
+                 Beneficio = o.Beneficio != null ? new BeneficioDTO
+                 {
+                     Id = o.Beneficio.Id,
+                     Nome = o.Beneficio.Nome,
+                     FatorConversao = o.Beneficio.FatorConversao
+                 } : null,
+             }).ToList();
+            return beneficioColaboradors;
+        }
+
         public void Update(BeneficioColaboradorDTO item)
         {
             BeneficioColaborador beneficioColaborador = _context.BeneficiosColaboradores.FirstOrDefault(x => x.Id == item.Id);

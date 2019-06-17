@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GestaoBeneficios.DAL.Interfaces;
 using GestaoBeneficios.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GestaoBeneficios.Controllers
@@ -20,12 +21,26 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Index()
         {
-            return View(Repository.ListarCargos());
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
+            {
+                return View(Repository.ListarCargos());
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }  
         }
 
         public IActionResult Create()
         {
-            return View();
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            }   
         }
 
         [HttpPost]
@@ -37,16 +52,23 @@ namespace GestaoBeneficios.Controllers
         }
         public IActionResult Edit(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                CargoDTO cargo = Repository.GetCargo(id.Value);
+                if (cargo == null)
+                {
+                    return NotFound();
+                }
+                return View(cargo);
             }
-            CargoDTO cargo = Repository.GetCargo(id.Value);
-            if (cargo == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(cargo);
         }
 
         [HttpPost]
@@ -63,16 +85,23 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Delete(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                CargoDTO cargo = Repository.GetCargo(id.Value);
+                if (cargo == null)
+                {
+                    return NotFound();
+                }
+                return View(cargo);
             }
-            CargoDTO cargo = Repository.GetCargo(id.Value);
-            if (cargo == null)
+            else
             {
-                return NotFound();
-            }
-            return View(cargo);
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
+            } 
         }
 
         [HttpPost]
@@ -90,16 +119,23 @@ namespace GestaoBeneficios.Controllers
 
         public IActionResult Details(long? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("UserRole") == "Administrador")
             {
-                return BadRequest();
+                if (id == null)
+                {
+                    return BadRequest();
+                }
+                CargoDTO cargo = Repository.GetCargo(id.Value);
+                if (cargo == null)
+                {
+                    return NotFound();
+                }
+                return View(cargo);
             }
-            CargoDTO cargo = Repository.GetCargo(id.Value);
-            if (cargo == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
-            return View(cargo);
         }
     }
 }
