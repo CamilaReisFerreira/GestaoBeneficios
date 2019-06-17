@@ -1,0 +1,65 @@
+﻿@model GestaoBeneficios.DTO.LogDTO
+
+@{
+    ViewData["Title"] = "Log de Alterações";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Log de Alteração</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Data)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Data)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Operacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Operacao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Campo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Campo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorAnterior)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValorAnterior)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorAtual)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValorAtual)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Id_Colaborador)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id_Colaborador)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Id_Beneficio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id_Beneficio)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Voltar para a listagem</a>
+</div>

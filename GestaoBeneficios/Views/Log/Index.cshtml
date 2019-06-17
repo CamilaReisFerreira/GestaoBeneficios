@@ -1,0 +1,72 @@
+﻿@model IEnumerable<GestaoBeneficios.DTO.LogDTO>
+
+@{
+    ViewData["Title"] = "Log de Alterações";
+}
+
+<h2>Log de Alterações</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Operacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Campo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorAnterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorAtual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id_Colaborador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id_Beneficio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Operacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Campo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorAnterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorAtual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id_Colaborador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id_Beneficio)
+            </td>
+            <td>
+                @Html.ActionLink("Detalhes", "Details", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
