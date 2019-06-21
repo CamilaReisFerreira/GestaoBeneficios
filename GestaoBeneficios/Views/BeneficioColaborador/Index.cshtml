@@ -16,6 +16,12 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Colaborador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beneficio)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Quantidade)
             </th>
             <th>
@@ -25,10 +31,16 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colaborador.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beneficio.Nome)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantidade)
@@ -42,6 +54,6 @@
                 @Html.ActionLink("Excluir", "Delete", new { id = item.Id })
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

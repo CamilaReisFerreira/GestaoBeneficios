@@ -17,6 +17,18 @@
                 <input asp-for="Id" class="form-control" readonly />
             </div>
             <div class="form-group">
+                <label asp-for="Colaborador" class="control-label"></label>
+                <select asp-for="Colaborador.Id" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Pessoas,"Id","Nome"))"></select>
+                <span asp-validation-for="Colaborador.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beneficio" class="control-label"></label>
+                <select asp-for="Beneficio.Id" id="Beneficio" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Beneficios,"Id","Nome"))"></select>
+                <span asp-validation-for="Beneficio.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Quantidade" class="control-label"></label>
                 <input asp-for="Quantidade" class="form-control" />
                 <span asp-validation-for="Quantidade" class="text-danger"></span>

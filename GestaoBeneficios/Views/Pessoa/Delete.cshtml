@@ -30,12 +30,6 @@
             @Html.DisplayFor(model => model.Login)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Senha)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Senha)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.CPF)
         </dt>
         <dd>
@@ -52,6 +46,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.DataAdmissao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cargo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cargo.Nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Perfil)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Perfil.Tipo)
         </dd>
     </dl>
 

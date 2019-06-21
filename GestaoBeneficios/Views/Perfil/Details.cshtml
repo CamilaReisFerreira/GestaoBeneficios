@@ -22,7 +22,24 @@
         <dd>
             @Html.DisplayFor(model => model.Tipo)
         </dd>
-    </dl>
+        <dt>
+        </dt>
+        @if (Model.Tipo == "Administrador")
+        {
+        <dd>
+            Permissão para interagir com todas as funções do sistema. <br />
+            Recomendado para gerentes e gestores de RH.
+        </dd>
+        }
+        else if (Model.Tipo == "Colaborador")
+        {
+        <dd>
+            Permissão para interagir apenas com seus próprios dados. <br />
+            Recomendado para os demais funcionários da empresa.
+        </dd>
+        }
+
+        </dl>
 </div>
 <div>
     <a asp-action="Index">Voltar para a listagem</a>

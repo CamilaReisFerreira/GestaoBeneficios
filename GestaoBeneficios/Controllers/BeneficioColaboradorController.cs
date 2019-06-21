@@ -47,7 +47,11 @@ namespace GestaoBeneficio.Controllers
         { 
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
-                ViewBag.Pessoas = Pessoa_Repository.ListarPessoas();
+                var pessoas = Pessoa_Repository.ListarPessoas();
+                if (HttpContext.Session.GetString("UserRole") == "Colaborador")
+                    pessoas = pessoas.Where(x => x.Id == Convert.ToInt64(HttpContext.Session.GetString("UserId"))).ToList();
+
+                ViewBag.Pessoas = pessoas;
                 ViewBag.Beneficios = Beneficio_Repository.ListarBeneficios();
                 return View();
             }
@@ -59,9 +63,9 @@ namespace GestaoBeneficio.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BeneficioColaboradorDTO beneficio)
+        public IActionResult Create(BeneficioColaboradorDTO beneficioColaborador)
         {
-            Repository.Add(beneficio);
+            Repository.Add(beneficioColaborador);
             return RedirectToAction("Index");
         }
 
@@ -74,8 +78,14 @@ namespace GestaoBeneficio.Controllers
                     return BadRequest();
                 }
                 BeneficioColaboradorDTO beneficio = Repository.GetBeneficioColaborador(id.Value);
-                ViewBag.Pessoas = Pessoa_Repository.ListarPessoas();
+
+                var pessoas = Pessoa_Repository.ListarPessoas();
+                if (HttpContext.Session.GetString("UserRole") == "Colaborador")
+                    pessoas = pessoas.Where(x => x.Id == Convert.ToInt64(HttpContext.Session.GetString("UserId"))).ToList();
+
+                ViewBag.Pessoas = pessoas;
                 ViewBag.Beneficios = Beneficio_Repository.ListarBeneficios();
+
                 if (beneficio == null)
                 {
                     return NotFound();
@@ -90,14 +100,14 @@ namespace GestaoBeneficio.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(BeneficioColaboradorDTO beneficio)
+        public IActionResult Edit(BeneficioColaboradorDTO beneficioColaborador)
         {
             if (ModelState.IsValid)
             {
-                Repository.Update(beneficio);
+                Repository.Update(beneficioColaborador);
                 return RedirectToAction("Index");
             }
-            return View(beneficio);
+            return View(beneficioColaborador);
         }
 
         public IActionResult Delete(long? id)
@@ -123,12 +133,12 @@ namespace GestaoBeneficio.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(BeneficioColaboradorDTO beneficio)
+        public IActionResult Delete(BeneficioColaboradorDTO beneficioColaborador)
         {
-            BeneficioColaboradorDTO car = Repository.GetBeneficioColaborador(beneficio.Id);
+            BeneficioColaboradorDTO car = Repository.GetBeneficioColaborador(beneficioColaborador.Id);
             if (car != null)
             {
-                Repository.Delete(beneficio.Id);
+                Repository.Delete(beneficioColaborador.Id);
                 TempData["Message"] = "Benefício foi removido";
             }
             return RedirectToAction("Index");
