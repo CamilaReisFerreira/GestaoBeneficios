@@ -38,14 +38,6 @@ namespace GestaoBeneficios.DAL.Persistencia
             _context.SaveChanges();
         }
 
-        //public void Delete(long Id)
-        //{
-        //    Log log = _context.Logs.FirstOrDefault(x => x.Id == Id);
-
-        //    _context.Logs.Remove(log);
-        //    _context.SaveChanges();
-        //}
-
         public LogDTO GetLog(long Id)
         {
             Log log = _context.Logs.Find(Id);
@@ -112,11 +104,5 @@ namespace GestaoBeneficios.DAL.Persistencia
             return logs;
         }
 
-        //public void Update(LogDTO item)
-        //{
-        //    Log log = _context.Logs.FirstOrDefault(x => x.Id == item.Id);
-        //    log.Tipo = item.Tipo;
-        //    _context.SaveChanges();
-        //}
     }
 }

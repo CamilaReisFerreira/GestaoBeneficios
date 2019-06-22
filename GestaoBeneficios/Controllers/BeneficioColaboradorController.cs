@@ -14,13 +14,15 @@ namespace GestaoBeneficio.Controllers
         public IBeneficioColaborador Repository { get; set; }
         public IBeneficio Beneficio_Repository { get; set; }
         public IPessoa Pessoa_Repository { get; set; }
+        public ILog Log_Repository { get; set; }
 
         public BeneficioColaboradorController(IBeneficioColaborador _repository,
-            IBeneficio _beneficioRepository, IPessoa _pessoaRepository)
+            IBeneficio _beneficioRepository, IPessoa _pessoaRepository, ILog _logRepository)
         {
             Repository = _repository;
             Beneficio_Repository = _beneficioRepository;
             Pessoa_Repository = _pessoaRepository;
+            Log_Repository = _logRepository;
         }
 
 
@@ -66,6 +68,7 @@ namespace GestaoBeneficio.Controllers
         public IActionResult Create(BeneficioColaboradorDTO beneficioColaborador)
         {
             Repository.Add(beneficioColaborador);
+            Log_Repository.Add(new LogDTO(beneficioColaborador,"Incluído"));
             return RedirectToAction("Index");
         }
 
@@ -104,7 +107,32 @@ namespace GestaoBeneficio.Controllers
         {
             if (ModelState.IsValid)
             {
+                var entity = Repository.GetBeneficioColaborador(beneficioColaborador.Id);
                 Repository.Update(beneficioColaborador);
+
+                #region Log
+
+                if (entity.Colaborador?.Id != beneficioColaborador.Colaborador?.Id)
+                {
+                    var pessoa = Pessoa_Repository.GetPessoa(beneficioColaborador.Colaborador.Id);
+                    Log_Repository.Add(new LogDTO(entity, "Alterado", "Colaborador", entity.Colaborador.Nome, pessoa.Nome));
+                }
+                if (entity.Beneficio?.Id != beneficioColaborador.Beneficio?.Id)
+                {
+                    var beneficio = Beneficio_Repository.GetBeneficio(beneficioColaborador.Beneficio.Id);
+                    Log_Repository.Add(new LogDTO(entity, "Alterado", "Benefício", entity.Beneficio.Nome, beneficio.Nome));
+                }
+                if (entity.Quantidade != beneficioColaborador.Quantidade)
+                {
+                    Log_Repository.Add(new LogDTO(entity, "Alterado", "Quantidade", entity.Quantidade.ToString(), beneficioColaborador.Quantidade.ToString()));
+                }
+                if (entity.ValorTotal != beneficioColaborador.ValorTotal)
+                {
+                    Log_Repository.Add(new LogDTO(entity, "Alterado", "ValorTotal", entity.ValorTotal.ToString(), beneficioColaborador.ValorTotal.ToString()));
+                }
+
+                #endregion
+
                 return RedirectToAction("Index");
             }
             return View(beneficioColaborador);
@@ -135,10 +163,11 @@ namespace GestaoBeneficio.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(BeneficioColaboradorDTO beneficioColaborador)
         {
-            BeneficioColaboradorDTO car = Repository.GetBeneficioColaborador(beneficioColaborador.Id);
-            if (car != null)
+            BeneficioColaboradorDTO entity = Repository.GetBeneficioColaborador(beneficioColaborador.Id);
+            if (entity != null)
             {
                 Repository.Delete(beneficioColaborador.Id);
+                Log_Repository.Add(new LogDTO(entity, "Excluído"));
                 TempData["Message"] = "Benefício foi removido";
             }
             return RedirectToAction("Index");

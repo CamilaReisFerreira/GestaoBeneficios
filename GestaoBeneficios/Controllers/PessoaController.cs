@@ -60,6 +60,12 @@ namespace GestaoPessoas.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(PessoaDTO pessoa)
         {
+            var retorno = Validate(pessoa);
+            if (!string.IsNullOrEmpty(retorno))
+            {
+                return BadRequest(retorno);
+            }
+
             Repository.Add(pessoa);
             return RedirectToAction("Index");
         }
@@ -93,6 +99,11 @@ namespace GestaoPessoas.Controllers
         {
             if (ModelState.IsValid)
             {
+                var retorno = Validate(pessoa);
+                if (!string.IsNullOrEmpty(retorno))
+                {
+                    return BadRequest(retorno);
+                }
                 Repository.Update(pessoa);
                 return RedirectToAction("Index");
             }
@@ -152,6 +163,16 @@ namespace GestaoPessoas.Controllers
             {
                 return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
+        }
+
+        private string Validate(PessoaDTO pessoa)
+        {
+            var pessoas = Repository.ListarPessoas();
+
+            if (pessoas.Where(q => q.Login == pessoa.Login && q.Id != pessoa.Id).Any())
+                return "Já existe uma pessoa cadastrada com este login!";
+
+            return string.Empty;
         }
     }
 }

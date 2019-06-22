@@ -27,5 +27,20 @@ namespace GestaoBeneficios.DTO
         public long? Id_Colaborador { get; set; }
 
         public long? Id_Beneficio { get; set; }
+
+        public LogDTO(BeneficioColaboradorDTO beneficioColaborador, string operacao, string campo = "", 
+            string valorAnterior = "", string valorAtual = "")
+        {
+            this.Colaborador = beneficioColaborador.Colaborador;
+            this.Beneficio = beneficioColaborador.Beneficio;
+            this.Data = DateTime.Now;
+            this.Operacao = operacao;
+            this.Campo = campo;
+            this.ValorAnterior = valorAnterior;
+            this.ValorAtual = valorAtual;
+        }
+
+        public LogDTO() { }
+
     }
 }
