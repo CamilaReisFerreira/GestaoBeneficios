@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Colaborador" class="control-label"></label>
-                <select asp-for="Colaborador.Id" class="form-control"
+                <select asp-for="Colaborador.Id"  id="Colaborador" class="form-control"
                         asp-items="@(new SelectList(ViewBag.Pessoas,"Id","Nome"))"></select>
                 <span asp-validation-for="Colaborador.Id" class="text-danger"></span>
             </div>
@@ -26,15 +26,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="Quantidade" class="control-label"></label>
-                <input asp-for="Quantidade" class="form-control" onchange="calculaValor()" />
+                <input asp-for="Quantidade" class="form-control" />
                 <span asp-validation-for="Quantidade" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="ValorTotal" class="control-label"></label>
-                <input asp-for="ValorTotal" class="form-control" />
+                <input asp-for="ValorTotal" class="form-control" readonly />
                 <span asp-validation-for="ValorTotal" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label class="control-label">Valor Disponível:</label>
+                <label id="ValorDisponivel" class="text-info"></label>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Cadastrar" class="btn btn-default" />
             </div>
@@ -45,6 +51,56 @@
 <div>
     <a asp-action="Index">Voltar para a listagem</a>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ValorDisponivel').text("1");
+
+        AtualizaSaldo();
+
+        $("#Quantidade").change(function () {
+            CalculaValor();
+        });
+
+        $("#Beneficio").change(function () {
+            CalculaValor();
+        });
+
+        $("#Colaborador").change(function () {
+            AtualizaSaldo();
+        });
+
+        function CalculaValor() {
+            var data = {
+                'quantidade': $("#Quantidade").val(),
+                'beneficio': $("#Beneficio").val()
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/BeneficioColaborador/CalculaValor',
+                data: data,
+                success: function (result) {
+                    $('#ValorTotal').val(result);
+                }
+            });
+        }
+
+        function AtualizaSaldo() {
+            var data = {
+                'colaborador': $("#Colaborador").val()
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/BeneficioColaborador/AtualizaSaldo',
+                data: data,
+                success: function (result) {
+                    $('#ValorDisponivel').text(result);
+                }
+            });
+        }
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

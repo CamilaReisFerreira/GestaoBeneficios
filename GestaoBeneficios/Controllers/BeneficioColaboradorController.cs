@@ -37,7 +37,7 @@ namespace GestaoBeneficio.Controllers
                     var id = Convert.ToInt64(HttpContext.Session.GetString("UserId"));
                     return View(Repository.ListarBeneficiosPorPessoa(id));
                 }
-                
+
             }
             else
             {
@@ -46,7 +46,7 @@ namespace GestaoBeneficio.Controllers
         }
 
         public IActionResult Create()
-        { 
+        {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("User")))
             {
                 var pessoas = Pessoa_Repository.ListarPessoas();
@@ -67,8 +67,14 @@ namespace GestaoBeneficio.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(BeneficioColaboradorDTO beneficioColaborador)
         {
+            var retorno = Validate(beneficioColaborador);
+            if (!string.IsNullOrEmpty(retorno))
+            {
+                return BadRequest(retorno);
+            }
+
             Repository.Add(beneficioColaborador);
-            Log_Repository.Add(new LogDTO(beneficioColaborador,"Incluído"));
+            Log_Repository.Add(new LogDTO(beneficioColaborador, "Incluído"));
             return RedirectToAction("Index");
         }
 
@@ -107,6 +113,12 @@ namespace GestaoBeneficio.Controllers
         {
             if (ModelState.IsValid)
             {
+                var retorno = Validate(beneficioColaborador);
+                if (!string.IsNullOrEmpty(retorno))
+                {
+                    return BadRequest(retorno);
+                }
+
                 var entity = Repository.GetBeneficioColaborador(beneficioColaborador.Id);
                 Repository.Update(beneficioColaborador);
 
@@ -192,6 +204,56 @@ namespace GestaoBeneficio.Controllers
             {
                 return RedirectToAction("NaoAutorizado", "Home", new { area = "" });
             }
+        }
+
+        public IActionResult CalculaValor(int? quantidade, long? beneficio)
+        {
+            var valorTotal = 0d;
+            if (quantidade.HasValue && beneficio.HasValue)
+            {
+                var benef = Beneficio_Repository.GetBeneficio(beneficio.Value);
+                if (benef != null)
+                {
+                    valorTotal = quantidade.Value * benef.FatorConversao;
+                }
+            }
+
+            return new JsonResult(valorTotal);
+        }
+
+        public IActionResult AtualizaSaldo(long? colaborador, long? id)
+        {
+            var saldo = 0d;
+            double? beneficiosValor;
+            if (colaborador.HasValue)
+            {
+                var pessoa = Pessoa_Repository.GetPessoa(colaborador.Value);
+
+                if (id.HasValue)
+                    beneficiosValor = Repository.ListarBeneficiosPorPessoa(colaborador.Value)?.
+                        Where(x => x.Id != id)?.Sum(x => x.ValorTotal);
+                else
+                    beneficiosValor = Repository.ListarBeneficiosPorPessoa(colaborador.Value)?.Sum(x => x.ValorTotal);
+
+                if (pessoa != null)
+                {
+                    saldo = pessoa.Cargo.ValorBeneficio - beneficiosValor.Value;
+                }
+            }
+
+            return new JsonResult(saldo);
+        }
+
+        private string Validate(BeneficioColaboradorDTO beneficio)
+        {
+            var pessoa = Pessoa_Repository.GetPessoa(beneficio.Colaborador.Id);
+            var beneficios = Repository.ListarBeneficiosPorPessoa(beneficio.Colaborador.Id)?
+                .Where(x => x.Id != beneficio.Id)?.Sum(x => x.ValorTotal);
+
+            if ((pessoa.Cargo.ValorBeneficio - beneficios.Value - beneficio.ValorTotal) < 0)
+                return "Valor de benefício utilizado é maior do que o disponível!";
+
+            return string.Empty;
         }
     }
 }

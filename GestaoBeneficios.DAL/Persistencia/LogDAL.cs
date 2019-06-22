@@ -76,7 +76,7 @@ namespace GestaoBeneficios.DAL.Persistencia
         {
             List<LogDTO> logs =
             (from log in _context.Logs
-             orderby log.Data
+             orderby log.Data descending
              select new LogDTO()
              {
                  Id = log.Id,
